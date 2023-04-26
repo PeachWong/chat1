@@ -125,7 +125,7 @@
                               <div class="min-h-[20px] flex flex-col items-start gap-4">
                                 <div v-html="mdToHtml(conv.speeches[conv.idx], conv)"
                                   :class="{ 'result-streaming': conv.loading }"
-                                  class="markdown prose w-full break-words dark:prose-invert light">
+                                  class="markdown prose-r w-full break-words dark:prose-invert light">
                                 </div>
                               </div>
                             </div>
@@ -667,7 +667,6 @@ import 'highlight.js/styles/github.css';
 
 const renderer = {
   code(code, infostring, escaped) {
-
     var codeHtml = code
     if (infostring) {
       codeHtml = hljs.highlightAuto(code).value
@@ -683,7 +682,7 @@ const renderer = {
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
           </svg>
           <span>Copy code</span>
-          <code style="display:none">${code}</code>
+          <code style="display:none">${encodeURIComponent(code)}</code>
         </button>
       </div>
       <div class="p-4 overflow-y-auto">
@@ -719,6 +718,7 @@ export default {
   },
   methods: {
     closeSource() {
+      var that = this;
       if (that.source) {
         that.source.close();
         that.source = undefined;
@@ -791,8 +791,8 @@ export default {
     },
     vueCopy(node) {
       var code = node.getElementsByTagName("code")[0].innerHTML
-
-      this.$copyText(code).then(
+      var text = decodeURIComponent(code);
+      this.$copyText(text).then(
         res => {
           var svg = `<svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                         <polyline points="20 6 9 17 4 12"></polyline>
@@ -1332,5 +1332,10 @@ body {
 
 .w-180px {
   width: 180px;
+}
+
+.prose-r {
+  font-size: 1rem;
+  line-height: 1.75;
 }
 </style>

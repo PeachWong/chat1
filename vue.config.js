@@ -23,12 +23,19 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     open: true,
+    before(app) {
+      app.use((req, res, next) => {
+        // 设置请求头
+        req.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODMzNTU4OTYsInBheWxvYWQiOnsiaWQiOjE2NDY3Njg3NjMwNjU5OTUyNjQsImFkdmFuY2VkIjowfX0.f4ocqSbBtGXduHNTe2q-3vitC4euYi5_LbIFGsnK-bY';
+        next();
+      });
+    },
     proxy: {
       '/api': {
-        target: 'http://43.156.32.232/api',
+        target: 'https://aide.51cto.com',
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/api': '/api'
         }
       }
     },
