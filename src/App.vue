@@ -668,6 +668,9 @@ import 'highlight.js/styles/github.css';
 const renderer = {
   code(code, infostring, escaped) {
     var codeHtml = code
+    if(infostring && infostring == "html"){
+       codeHtml = encodeURIComponent(code);
+    }
     if (infostring) {
       codeHtml = hljs.highlightAuto(code).value
     }
